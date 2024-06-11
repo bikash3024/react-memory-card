@@ -37,12 +37,18 @@ function App() {
 
   useEffect(() => {
     // Initial fetch
-    shuffleAndFetch();
+    fetchAllPokemon();
   }, []);
 
-  const shuffleAndFetch = () => {
-    const shuffled = [...pokemonList].sort(() => Math.random() - 0.5);
-    Promise.all(shuffled.map(fetchPokemon)).then(setCollection);
+  const fetchAllPokemon = async () => {
+    const data = await Promise.all(pokemonList.map(fetchPokemon));
+    setCollection(data);
+  };
+
+  const shuffleCollection = () => {
+    setCollection((prevCollection) =>
+      [...prevCollection].sort(() => Math.random() - 0.5)
+    );
   };
 
   const handleClick = (name: string) => {
@@ -54,7 +60,7 @@ function App() {
       }
       setChoices([]);
     }
-    shuffleAndFetch();
+    shuffleCollection();
   };
 
   return (
